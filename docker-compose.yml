@@ -1,0 +1,36 @@
+version: '3'
+
+networks:
+  microservice:
+    external:
+      name: microservice
+
+services:
+  webapp:
+    restart: always
+    image:  geniusming/streaming:latest
+    deploy:
+     replicas: 3
+     placement:
+       constraints: [node.labels.type == videorec , node.labels.env == product]
+     restart_policy:
+      condition: any
+     resources:
+       limits:
+        cpus: "0.2"
+        memory: 200M
+    environment:
+     - RTMP_STREAM_NAMES=live
+    ports:
+      - "1935:1935"
+      - "8080:8080"
+    networks:
+      - microservice
+    volumes:
+      - "/mnt/videorec/dest:/usr/local/var/www/vod"
+      - "/mnt/videorec/live:/usr/local/var/www/live"
+    logging:
+     driver: fluentd
+     options:
+       fluentd-address: "127.0.0.1:24224"
+       tag: "microservice"
