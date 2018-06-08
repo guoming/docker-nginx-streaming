@@ -1,6 +1,7 @@
 # 安装
 ```bash
 docker run --name nginx-streaming -d \   
+    -env LIVE_STREAM_NAMES=live \
     -p 1935:1935 \
     -p 8080:8080  \ 
     --volume /mnt/video/vod:/usr/local/var/www/vod \
