@@ -14,9 +14,11 @@ docker run --name nginx-streaming -d \
 ffmpeg -re -i <video path> -vcodec libx264 -acodec aac -strict -2 -f flv rtmp://127.0.0.1/live/<live stream name>
 ```
 RTMP 地址
-rtmp://127.0.0.1/live/<live stream name>    
+rtmp://127.0.0.1/live/<live stream name>
+    
 rtmp://127.0.0.1/vod/<vod stream name>
 
 # HLS
 http://127.0.0.1:8080/live/<live stream name>.mu38
+
 http://127.0.0.1:8080/vod/<vod stream name>.mu38
