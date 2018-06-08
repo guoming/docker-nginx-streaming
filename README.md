@@ -18,6 +18,5 @@ rtmp://127.0.0.1/live/<live stream name>
 rtmp://127.0.0.1/vod/<vod stream name>
 
 # HLS
-http://127.0.0.1:8080/live/<live stream name>
-    
-http://127.0.0.1:8080/live/<vod stream name>
+http://127.0.0.1:8080/live/<live stream name>.mu38
+http://127.0.0.1:8080/vod/<vod stream name>.mu38
