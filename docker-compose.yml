@@ -8,7 +8,7 @@ networks:
 services:
   webapp:
     restart: always
-    image:  geniusming/streaming:latest
+    image:  geniusming/nginx-streaming:latest
     deploy:
      replicas: 3
      placement:

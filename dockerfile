@@ -67,7 +67,7 @@ RUN rm /opt/nginx/conf/nginx.conf
 add run.sh /
 RUN chmod 777 /run.sh
 
-VOLUME /usr/local/var/www/hls
+VOLUME /usr/local/var/www/live
 VOLUME /usr/local/var/www/vod
 
 EXPOSE 1935

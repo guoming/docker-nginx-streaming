@@ -5,9 +5,9 @@ NGINX_CONFIG_FILE=/opt/nginx/conf/nginx.conf
 LIVE_ROOT_PATH=${LIVE_ROOT_PATH-/usr/local/var/www/live}
 VOD_ROOT_PATH=${VOD_ROOT_PATH-/usr/local/var/www/vod}
 
-RTMP_CONNECTIONS=${RTMP_CONNECTIONS-1024}
-RTMP_STREAM_NAMES=${RTMP_STREAM_NAMES-live,testing}
-RTMP_STREAMS=$(echo ${RTMP_STREAM_NAMES} | sed "s/,/\n/g")
+CONNECTIONS=${CONNECTIONS-1024}
+LIVE_STREAM_NAMES=${LIVE_STREAM_NAMES-live,testing}
+LIVE_STREAMS=$(echo ${LIVE_STREAM_NAMES} | sed "s/,/\n/g")
 RTMP_PUSH_URLS=$(echo ${RTMP_PUSH_URLS} | sed "s/,/\n/g")
 
 
@@ -20,7 +20,7 @@ cat >${NGINX_CONFIG_FILE} <<!EOF
 worker_processes 1;
 
 events {
-    worker_connections ${RTMP_CONNECTIONS};
+    worker_connections ${CONNECTIONS};
 }
 !EOF
 
@@ -44,15 +44,23 @@ http {
             alias ${VOD_ROOT_PATH};
             add_header  Cache-Control no-cache;
         }
-
-        location /live {
+!EOF
+for STREAM_NAME in $(echo ${LIVE_STREAMS}) 
+do
+    cat >>${NGINX_CONFIG_FILE} <<!EOF
+    location /${STREAM_NAME} {
             types {
                 application/vnd.apple.mpegurl m3u8;
                 video/mp2ts ts;
             }
-            alias ${LIVE_ROOT_PATH};
+            alias ${LIVE_ROOT_PATH}/${STREAM_NAME};
             add_header  Cache-Control no-cache;
         }
+!EOF
+done
+
+
+cat >>${NGINX_CONFIG_FILE} <<!EOF
 
         location /on_publish {
             return  201;
@@ -97,7 +105,7 @@ fi
 
 HLS="true"
 
-for STREAM_NAME in $(echo ${RTMP_STREAMS}) 
+for STREAM_NAME in $(echo ${LIVE_STREAMS}) 
 do
 
 echo Creating stream $STREAM_NAME
