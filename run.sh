@@ -112,7 +112,8 @@ echo Creating stream $STREAM_NAME
 cat >>${NGINX_CONFIG_FILE} <<!EOF
         application ${STREAM_NAME} {
             live on;
-            record off;
+            record all;
+            record_path ${LIVE_ROOT_PATH}/${STREAM_NAME}
             on_publish http://localhost:8080/on_publish;
 !EOF
 if [ "${HLS}" = "true" ]; then
